@@ -22,4 +22,13 @@ enum ResponseType {
         }
         return EXCEPTION;
     }
+
+    public static ResponseType getByResponse(Response response) {
+        ResponseType responseType = getByMsg(response.result());
+        if (responseType == BAD_PASSWORD) {
+            //Side channel attack
+            responseType = response.getElapsedTime() > 10 ? PREFIX_MATCH : BAD_PASSWORD;
+        }
+        return responseType;
+    }
 }

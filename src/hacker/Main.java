@@ -138,8 +138,8 @@ public class Main {
                     default -> throw new IllegalStateException("Ayo wtf");
                 }
                 request = new Request(login, pw);
-                Response response = new Gson().fromJson(client.sendAndReceive(request), Response.class);
-                responseType = ResponseType.getByMsg(response.result());
+                Response response = client.sendAndReceive(request);
+                responseType = ResponseType.getByResponse(response);
             } while (responseType != ResponseType.SUCCESS);
 
 

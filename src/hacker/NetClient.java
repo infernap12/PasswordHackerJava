@@ -24,22 +24,29 @@ public class NetClient implements Closeable{
         logger.info("Connected to " + socket.getInetAddress().getHostAddress());
     }
 
-    public String sendAndReceive(Request req) {
+    public Response sendAndReceive(Request req) {
         String asJson = gson.toJson(req);
         logger.info("Attempt " + ++transmits + " Sending message: " + asJson);
-        String response = null;
+        String strResponse = null;
+        long elapsedTime = 0;
         try {
             outputStream.writeUTF(asJson);
-            response = inputStream.readUTF();
+            long startTime = System.currentTimeMillis();
+            strResponse = inputStream.readUTF();
+            elapsedTime = System.currentTimeMillis() - startTime;
+            logger.info("Time taken: " + elapsedTime + " ms");
         } catch (IOException e) {
             logger.severe("IO Exception: " + e);
         }
-        if (response == null) {
+        if (strResponse == null) {
             logger.severe("No response received");
         } else {
-            logger.info("Received response: " + response);
+            logger.info("Received response: " + strResponse);
         }
+        Response response = gson.fromJson(strResponse, Response.class);
+        response.setElapsedTime(elapsedTime);
         return response;
+
     }
 
     @Override
