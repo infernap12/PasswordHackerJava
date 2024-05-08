@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class NetClient implements Closeable{
+public class NetClient implements Closeable {
     Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
     int transmits = 0;
 

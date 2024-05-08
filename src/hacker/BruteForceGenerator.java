@@ -1,28 +1,23 @@
 package hacker;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BruteForceGenerator implements Iterator<String> {
     private final int maxLength;
     private int currentLength = 1;
-    private int[] currentState;
+    private final int[] currentState;
     private boolean isExhausted = false;
 
     // Define the character ranges
     private static final char[] PASSWORD_CHARACTERS;
+
     static {
-        //todo split this into some kind of define pair ranges loop
-        PASSWORD_CHARACTERS = IntStream.concat(
-                        // For lowercase letters
-                        IntStream.rangeClosed('a', 'z'),
-                        // For uppercase letters
-                        IntStream.concat(IntStream.rangeClosed('A', 'Z'),
-                                // For numbers
-                                IntStream.rangeClosed('0', '9')))
-                .mapToObj(c -> "" + (char)c)
+        char[][] pairs = {{'a', 'z'}, {'A', 'Z'}, {'0', '9'}};
+        PASSWORD_CHARACTERS = Arrays.stream(pairs)
+                .flatMapToInt(x -> IntStream.rangeClosed(x[0], x[1]))
+                .mapToObj(c -> "" + (char) c)
                 .collect(Collectors.joining())
                 .toCharArray();
     }
